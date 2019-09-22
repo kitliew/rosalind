@@ -1,3 +1,23 @@
+#!/usr/bin/env python3
+
+# Problem
+# Either strand of a DNA double helix can serve as the coding strand for RNA transcription. Hence, a given DNA string implies six total reading frames, or ways in which the same region of DNA can be translated into amino acids: three reading frames result from reading the string itself, whereas three more result from reading its reverse complement.
+#
+# An open reading frame (ORF) is one which starts from the start codon and ends by stop codon, without any other stop codons in between. Thus, a candidate protein string is derived by translating an open reading frame into amino acids until a stop codon is reached.
+#
+# Given: A DNA string s of length at most 1 kbp in FASTA format.
+#
+# Return: Every distinct candidate protein string that can be translated from ORFs of s. Strings can be returned in any order.
+#
+# Sample Dataset
+# >Rosalind_99
+# AGCCATGTAGCTAACTCAGGTTACATGGGGATGACCCCGCGACTTGGATTAGAGTCTCTTTTGGAATAAGCCTGAATGATCCGAGTAGCATCTCAG
+# Sample Output
+# MLLGSFRLIPKETLIQVAGSSPCNLS
+# M
+# MGMTPRLGLESLLE
+# MTPRLGLESLLE
+
 import sys
 
 _table = """UUU F      CUU L      AUU I      GUU V
@@ -24,24 +44,21 @@ traDict = dict(zip(traL[0::2], traL[1::2]))
 
 def decode(coded):
     result = ""
-    for i in range(0, len(coded), 3):
-        if traDict[coded[i:i+3]] != "Stop":
-            result += traDict[coded[i:i+3]]
+    for i in range(0, len(coded) - (len(coded) % 3), 3):
+        test = traDict[coded[i:i+3]]
+        if test == "Stop":
+            return result
         else:
-            break
-    return result
+            result += traDict[coded[i:i+3]]
 
 def dna_to_prot(dna):
     result = []
     # represent 3 ORF
     for x in range(3):
-        seq = dna[x:]
-    # position where start codon is found
-        current_pos = 0
-    # scanning through seq (window sliding), starting from previous codon found (pos + 1)
-        for i in range(current_pos, len(seq), 3):
-            if seq[i:i+3] == "ATG":
-                result.append(decode(seq[i:]))
+        for i in range(x, len(dna) - (len(dna) %3), 3):
+            if dna[i:i+3] == "ATG":
+                _aa = decode(dna[i:])
+                result += [_aa] if _aa is not None else []
     return result
 
 def rev_comple(dna):
@@ -51,7 +68,7 @@ def rev_comple(dna):
 
 if __name__ == "__main__":
     with open(sys.argv[1]) as file:
-        dna = file.read().strip().split("\n")[-1].replace("\n","")
+        dna = file.read().strip().partition("\n")[-1].replace("\n","")
         dna_r = rev_comple(dna)
         result = dna_to_prot(dna) + dna_to_prot(dna_r)
         for i in set(result):

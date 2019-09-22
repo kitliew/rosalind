@@ -1,10 +1,47 @@
 import sys
 
-def permutation(number):
-    numbers = [x for x in range(1, number+1)]
-    return numbers
+import sys
 
-print(permutation(3))
+# Python function to print permutations of a given list
+def permutation(lst):
+
+    # If lst is empty then there are no permutations
+    if len(lst) == 0:
+        return []
+
+    # If there is only one element in lst then, only
+    # one permuatation is possible
+    if len(lst) == 1:
+        return [lst]
+
+    # Find the permutations for lst if there are
+    # more than 1 characters
+
+    l = [] # empty list that will store current permutation
+
+    # Iterate the input(lst) and calculate the permutation
+    for i in range(len(lst)):
+       m = lst[i]
+
+       # Extract lst[i] or m from the list.  remLst is
+       # remaining list
+       remLst = lst[:i] + lst[i+1:]
+
+       # Generating all permutations where m is first
+       # element
+       for p in permutation(remLst):
+           l.append([m] + p)
+    return l
+
+
+if __name__=="__main__":
+    for number in sys.stdin.readline(1):
+        numbers = [x for x in range(1, int(number)+1)]
+        test=permutation(numbers)
+        print(len(test))
+        for i in test:
+            print(*i)
+
 
 
 

@@ -1,17 +1,41 @@
 #!/usr/bin/env python3
+#
+# Problem
+# A matrix is a rectangular table of values divided into rows and columns. An m×n matrix has m rows and n columns. Given a matrix A, we write Ai,j to indicate the value found at the intersection of row i and column j.
+#
+# Say that we have a collection of DNA strings, all having the same length n. Their profile matrix is a 4×n matrix P in which P1,j represents the number of times that 'A' occurs in the jth position of one of the strings, P2,j represents the number of times that C occurs in the jth position, and so on (see below).
+#
+# A consensus string c is a string of length n formed from our collection by taking the most common symbol at each position; the jth symbol of c therefore corresponds to the symbol having the maximum value in the j-th column of the profile matrix. Of course, there may be more than one most common symbol, leading to multiple possible consensus strings.
+#
+# Given: A collection of at most 10 DNA strings of equal length (at most 1 kbp) in FASTA format.
+#
+# Return: A consensus string and profile matrix for the collection. (If several possible consensus strings exist, then you may return any one of them.)
+#
+# Sample Dataset
+# >Rosalind_1
+# ATCCAGCT
+# >Rosalind_2
+# GGGCAACT
+# >Rosalind_3
+# ATGGATCT
+# >Rosalind_4
+# AAGCAACC
+# >Rosalind_5
+# TTGGAACT
+# >Rosalind_6
+# ATGCCATT
+# >Rosalind_7
+# ATGGCACT
+
+# Sample Output
+# ATGCAACT
+# A: 5 1 0 0 5 5 0 0
+# C: 0 0 1 4 2 0 6 1
+# G: 1 1 6 3 0 1 0 0
+# T: 1 5 0 0 0 1 1 6
+
 import sys
-
-"""
-Output:
-#count ACGT at each index
-#return consensus(highest nucleotide) at each index
-
-Input:
-#10 DNA strings of equal length
-#FASTA format
-"""
-
-
+import pprint
 def fasta_file(filename):
     #only need to collect a list of DNA string
     samples=[]
@@ -30,47 +54,25 @@ def count_index(filename):
     #group DNA string index together
     test = list(zip(*samples))
     #for each index group, count ACGT
-    A_count = []
-    C_count = []
-    G_count = []
-    T_count = []
+    DNA = sorted(set("ACGT"))
+    cnt = {}
+    for x in DNA:
+        cnt[x] = []
+    consensus = ""
     for i in test:
-        A_count.append(i.count("A"))
-        C_count.append(i.count("C"))
-        G_count.append(i.count("G"))
-        T_count.append(i.count("T"))
-    return A_count,C_count, G_count, T_count
+        highest_count = 0
+        highest_DNA = ""
+        for j in DNA:
+            score = i.count(j)
+            cnt[j].append(score)
+            if score > highest_count:
+                highest_count = score
+                highest_DNA = j
+            else:
+                continue
+        consensus+=highest_DNA
+    print(consensus)
+    for c,v in cnt.items():
+        print("{}:".format(c), *v)
 
-def consensus(filename):
-    samples = fasta_file(filename)
-    test = list(zip(*samples))
-    #prepare a list of highest index to store
-    consensus = []
-    for i in test:
-        #making a dict with nucleotide as key; number of occurance as value
-        #counter position is crucial. will reset counter at each index(during iterate)
-        counter = {}
-        for x in "ACGT":
-            counter[x] = i.count(x)
-        largest=0
-        best = ""
-        for c,v in counter.items():
-            #if value is larger than 0 or current value stored
-            if v > largest:
-                largest = v
-                best = c
-        consensus.append(best)
-    #return a string of DNA
-    return("".join(consensus))
-
-def main():
-    filename = sys.argv[1]
-    A,C,G,T = count_index(filename)
-    print(consensus(filename))
-    print("A:", *A)
-    print("C:", *C)
-    print("G:", *G)
-    print("T:", *T)
-
-if __name__ == "__main__":
-    main()
+count_index(sys.argv[1])
