@@ -28,6 +28,7 @@ def read_file(filename):
     return dna
 
 def cata(seq, lo, hi, result):
+    """the idea is to count how many ways of drawing non-crossing perfect matching"""
     mapping = {
         "A": "U",
         "U": "A",
@@ -46,6 +47,8 @@ def cata(seq, lo, hi, result):
     # if answer is memorized
     if (lo, hi) in result:
         return result[(lo, hi)]
+    # this part is to loop
+    # if the given position DNA pair with kth position, how many other dna "pair" can form on the left& right
     else:
         curr = seq[lo]
         target = mapping[curr]

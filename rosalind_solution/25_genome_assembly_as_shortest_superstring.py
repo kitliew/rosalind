@@ -45,7 +45,7 @@ def find_overlaps(arr, acc=""):
                 if acc.startswith(x[j:]):
                     arr.pop(i)
                     return find_overlaps(arr, x[:j] + acc)
-                if acc.endswith(x[:k]):
+                elif acc.endswith(x[:k]):
                     arr.pop(i)
                     return find_overlaps(arr, acc + x[k:])
 
