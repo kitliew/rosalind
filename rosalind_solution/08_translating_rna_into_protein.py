@@ -47,7 +47,7 @@ def decode(coded):
         if _aa == "Stop":
             break
         else:
-            result += traDict[coded[i:i+3]]
+            result += _aa
     return result
 
 print(decode(protein))

@@ -39,7 +39,6 @@ UGG W      CGG R      AGG R      GGG G"""
 
 
 traL =  string.split()
-traDict = dict(zip(traL[0::2], traL[1::2]))
 rna_all = traL[1::2]
 rna = set(rna_all)
 tracount = {a: rna_all.count(a) for a in rna_all}

@@ -56,7 +56,7 @@ def url_content(ID):
 def find_protein_motif(ID):
     """find possible protein motif in protein sequence"""
     id, protein = url_content(ID)
-    all_target=re.findall(r'(?=N[^P][ST][^P])', protein)
+    all_target=re.findall(r'N[^P][ST][^P]', protein)
     return list(all_target)
 
 def find_iloc_protein_motif(ID):

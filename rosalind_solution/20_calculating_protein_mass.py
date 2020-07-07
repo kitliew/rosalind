@@ -42,12 +42,12 @@ V   99.06841
 W   186.07931
 Y   163.06333
 """
+elements = weighted_alphabet.split()
+alphabet = elements[::2]
+weight = elements[1::2]
+dic_weight_alphabet = dict(zip(alphabet,weight))
 
 def weighted_table(aa):
-    elements = weighted_alphabet.split()
-    alphabet = elements[::2]
-    weight = elements[1::2]
-    dic_weight_alphabet = dict(zip(alphabet,weight))
     return(float(dic_weight_alphabet[aa]))
 
 def protein_weight(aa_string):
@@ -63,4 +63,4 @@ def main():
         print(protein_weight(aa_string))
 
 if __name__ == "__main__":
-	main()
+    main()
