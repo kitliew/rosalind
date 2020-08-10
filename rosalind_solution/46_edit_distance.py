@@ -41,7 +41,6 @@ def leven(filename):
                 M[i][j] = M[i-1][j-1]
             else:
                 M[i][j] = min(M[i-1][j]+1,M[i][j-1]+1, M[i-1][j-1]+1)
-    print(M)
     return M[len(s)][len(t)]
 
 
